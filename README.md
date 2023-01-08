@@ -61,3 +61,68 @@ public class CarsExcelExporter {
 	   }
 }
 
+
+
+
+//will download the excel when we call the respective  REST api
+package com.demo.excelConfig;
+
+import java.util.List;
+
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.demo.model.Car;
+
+public class ExcelExportService {
+
+	
+	
+	//exporting excel service
+	 public XSSFWorkbook generateExcelFile(List<Car> cars) {
+	      XSSFWorkbook workbook = new XSSFWorkbook();
+	      Sheet sheet = workbook.createSheet("Sheet1");
+
+	      Row headerRow = sheet.createRow(0);
+	      headerRow.createCell(0).setCellValue("ID");
+	      headerRow.createCell(1).setCellValue("Name");
+	      headerRow.createCell(2).setCellValue("Price");
+
+	      int rowNum = 1;
+	      for (Car car : cars) {
+	         Row row = sheet.createRow(rowNum++);
+	         row.createCell(0).setCellValue(car.getcId());
+	         row.createCell(1).setCellValue(car.getcName());
+	         row.createCell(2).setCellValue(car.getCost());
+	      }
+
+	      return workbook;
+	   }
+
+	
+}
+
+
+//demonstratration
+//downloading excel
+	@GetMapping("/download")
+	public ResponseEntity<byte[]> downloadExcelFile() throws IOException {
+		ExcelExportService excelExportService = new ExcelExportService();
+		List<Car> cars = carService.getCars();
+		// retrieve data from database or some other source
+
+
+		org.apache.poi.xssf.usermodel.XSSFWorkbook workbook = excelExportService.generateExcelFile(cars);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentDispositionFormData("attachment", "data.xlsx");
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		workbook.write(baos);
+		byte[] bytes = baos.toByteArray();
+
+		return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
+	}
+
