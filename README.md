@@ -1,33 +1,33 @@
-__# Springboot_Storing_Data_In_Excel
-This is a springboot file to demonstrate  using of excel/csv file , here we are taking list of objects and passing it to a service which has a method when called it will store the data in excel file.
+# Springboot_Storing_Data_In_Excel
+## This is a springboot file to demonstrate  using of excel/csv file , here we are taking list of objects and passing it to a service which has a method when called it will store the data in excel file.
 
 dependency  used in pom.xml
 
-<dependency>
+                 <dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId> poi-ooxml</artifactId>
 			<version>5.1.0</version>
-		</dependency>
+		 </dependency>
 
---service class
-package com.demo.excelConfig;
+### service class
+          package com.demo.excelConfig;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.List;
+        import java.io.FileOutputStream;
+         import java.io.IOException;
+          import java.util.List;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+             import org.apache.poi.ss.usermodel.Cell;
+           import org.apache.poi.ss.usermodel.Row;
+            import org.apache.poi.xssf.usermodel.XSSFSheet;
+               import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import org.apache.poi.ss.usermodel.Sheet;
-import com.demo.model.Car;
+            import org.apache.poi.ss.usermodel.Sheet;
+         import com.demo.model.Car;
 
-import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.http.HttpServletResponse;
+           import jakarta.servlet.ServletOutputStream;
+            import jakarta.servlet.http.HttpServletResponse;
 
-public class CarsExcelExporter {
+           public class CarsExcelExporter {
 
 	
 	
@@ -46,7 +46,7 @@ public class CarsExcelExporter {
 	      headerRow.createCell(2).setCellValue("Price");
 
 	      
-	    //  since we have data , we will create a loop and add data and increment the row , and so we will start the row from 1st as for 0th have given the column name
+	    //  since we have data , we will create a loop and add data and increment the row , and so we will start the row from 1st as for 0th have given the column             name
 	      int rowNum = 1;
 	      for (Car car : cars) {
 	         Row row = sheet.createRow(rowNum++);
@@ -59,29 +59,29 @@ public class CarsExcelExporter {
 	      workbook.write(outputStream);
 	      outputStream.close();
 	   }
-}
+            }
 
 
 
 
-//will download the excel when we call the respective  REST api
-package com.demo.excelConfig;
+### Will download the excel when we call the respective  REST api
+           package com.demo.excelConfig;
 
-import java.util.List;
+            import java.util.List;
 
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+            import org.apache.poi.ss.usermodel.Row;
+       import org.apache.poi.ss.usermodel.Sheet;
+         import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.demo.model.Car;
+         import com.demo.model.Car;
 
-public class ExcelExportService {
+            public class ExcelExportService {
 
 	
 	
-	//exporting excel service
-	 public XSSFWorkbook generateExcelFile(List<Car> cars) {
-	      XSSFWorkbook workbook = new XSSFWorkbook();
+	 //exporting excel service
+	  public XSSFWorkbook generateExcelFile(List<Car> cars) {
+	        XSSFWorkbook workbook = new XSSFWorkbook();
 	      Sheet sheet = workbook.createSheet("Sheet1");
 
 	      Row headerRow = sheet.createRow(0);
@@ -96,18 +96,18 @@ public class ExcelExportService {
 	         row.createCell(1).setCellValue(car.getcName());
 	         row.createCell(2).setCellValue(car.getCost());
 	      }
-
+  
 	      return workbook;
-	   }
-
+	    }
+ 
 	
-}
+        }
 
 
-//demonstratration
-//downloading excel
-	@GetMapping("/download")
-	public ResponseEntity<byte[]> downloadExcelFile() throws IOException {
+### demonstratration
+### downloading excel
+	       @GetMapping("/download")
+	       public ResponseEntity<byte[]> downloadExcelFile() throws IOException {
 		ExcelExportService excelExportService = new ExcelExportService();
 		List<Car> cars = carService.getCars();
 		// retrieve data from database or some other source
@@ -124,5 +124,5 @@ public class ExcelExportService {
 		byte[] bytes = baos.toByteArray();
 
 		return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
-	}
+           	}
 
