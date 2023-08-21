@@ -1,3 +1,5 @@
+
+#Creating a CellStyle object and setting its fill foreground color to orange
 CellStyle style = workbook.createCellStyle();
 style.setFillForegroundColor(IndexedColors.ORANGE.getIndex());
 style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
@@ -11,6 +13,31 @@ for (Car car : cars) {
     realCostCell.setCellValue(car.getRealCost());
 
     // If the real cost is less than the market cost, set the cell's style to orange
+    if (car.getRealCost() < car.getmarketCost()) {
+        realCostCell.setCellStyle(style);
+    }
+}
+
+
+To change the color of the text (numbers) in the cell, you can use the Font class in Apache POI. Here's how you can modify your code:
+
+// Create a Font object and set its color to orange
+Font font = workbook.createFont();
+font.setColor(IndexedColors.ORANGE.getIndex());
+
+// Create a CellStyle object and set its font
+CellStyle style = workbook.createCellStyle();
+style.setFont(font);
+
+for (Car car : cars) {
+    Row row = sheet.createRow(rowNum++);
+    row.createCell(0).setCellValue(car.getcId());
+    row.createCell(1).setCellValue(car.getcName());
+    row.createCell(2).setCellValue(car.getmarketCost());
+    Cell realCostCell = row.createCell(3);
+    realCostCell.setCellValue(car.getRealCost());
+
+    // If the real cost is less than the market cost, set the cell's font color to orange
     if (car.getRealCost() < car.getmarketCost()) {
         realCostCell.setCellStyle(style);
     }
