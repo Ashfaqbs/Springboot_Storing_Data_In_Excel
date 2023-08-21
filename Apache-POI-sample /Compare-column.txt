@@ -1,0 +1,17 @@
+CellStyle style = workbook.createCellStyle();
+style.setFillForegroundColor(IndexedColors.ORANGE.getIndex());
+style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+for (Car car : cars) {
+    Row row = sheet.createRow(rowNum++);
+    row.createCell(0).setCellValue(car.getcId());
+    row.createCell(1).setCellValue(car.getcName());
+    row.createCell(2).setCellValue(car.getmarketCost());
+    Cell realCostCell = row.createCell(3);
+    realCostCell.setCellValue(car.getRealCost());
+
+    // If the real cost is less than the market cost, set the cell's style to orange
+    if (car.getRealCost() < car.getmarketCost()) {
+        realCostCell.setCellStyle(style);
+    }
+}
